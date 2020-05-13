@@ -1,4 +1,4 @@
-# kvb-rad-js
+# kvb-rad-ui
 
 ## Project setup
 ```
