@@ -32,3 +32,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### WebStorm config
+There are some issues with the formatting of the vue files. The formatter contradicts to eslint.
+- [Add "script" and "style" entries into settings "Editor > Code Style > HTML | Other | Do not indent children of".](https://youtrack.jetbrains.com/issue/WEB-30382)
+- Right click in the [](https://www.jetbrains.com/help/webstorm/eslint.html#ws_js_linters_eslint_import_code_style_from_eslint)
