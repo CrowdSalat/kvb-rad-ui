@@ -20,19 +20,19 @@ export default {
     this.initMap();
     this.initLayer();
     const intensity = 1.0;
-    this.initHeatmapLayer([
-      [50.935173, 6.953101, intensity],
-      [50.915173, 6.953102, intensity],
-      [50.935173, 6.953103, intensity],
-      [50.925173, 6.953104, intensity],
-      [50.935173, 6.953105, intensity],
-      [50.935173, 6.953106, intensity],
-      [50.935173, 6.953107, intensity],
-      [50.935173, 6.953108, intensity],
-      [50.945173, 6.953109, intensity],
-      [50.935173, 6.953100, intensity],
-      [50.935171, 6.953101, intensity],
-    ]);
+    const response = fetch('http://localhost:9090/bikes');
+    response.then((resp) => {
+      resp.json()
+        .then((jsonResp) => {
+          // eslint-disable-next-line no-underscore-dangle
+          const { bikes } = jsonResp._embedded;
+          const list = [];
+          bikes.forEach((bike) => {
+            list.push([bike.lat, bike.lng, intensity]);
+          });
+          this.initHeatmapLayer(list);
+        });
+    });
   },
   beforeDestroy() {
     this.removeMap();
