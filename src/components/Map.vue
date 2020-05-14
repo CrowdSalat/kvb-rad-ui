@@ -8,6 +8,9 @@ import L from 'leaflet';
 // need to be imported this way or the library will not get loaded properly
 import 'leaflet.heat';
 
+// eslint-disable-next-line no-unused-vars
+import { decodePath } from './graphhopper';
+
 export default {
   name: 'Map',
   data() {
@@ -20,17 +23,21 @@ export default {
     this.initMap();
     this.initLayer();
     const intensity = 1.0;
-    const response = fetch('http://localhost:9090/bikes');
+    const response = fetch('http://localhost:9090/tours');
     response.then((resp) => {
       resp.json()
         .then((jsonResp) => {
           // eslint-disable-next-line no-underscore-dangle
-          const { bikes } = jsonResp._embedded;
+          const { tours } = jsonResp._embedded;
           const list = [];
-          bikes.forEach((bike) => {
-            list.push([bike.lat, bike.lng, intensity]);
+          tours.forEach((tour) => {
+            const waypoints = decodePath(tour.encodedWaypoints, false);
+            waypoints.forEach((waypoint) => {
+              list.push([waypoint[1], waypoint[0], intensity]);
+            });
           });
-          this.initHeatmapLayer(list);
+          console.log(list);
+          this.initHeatmapLayer(list.slice(10));
         });
     });
   },
