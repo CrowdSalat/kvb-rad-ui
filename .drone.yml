@@ -14,7 +14,6 @@ steps:
         from_secret: docker_password
       repo: crowdsalat/kvb-rad-ui
       tags:
-        - ${DRONE_TAG}
         - latest
 
   - name: start application
