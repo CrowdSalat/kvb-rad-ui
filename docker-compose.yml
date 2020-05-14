@@ -15,7 +15,7 @@ services:
     ports:
       - "127.0.0.1:9091:8080"
     depends_on:
-      - kvb-rad-runner
+      - kvb-rad
   database:
     container_name: kvb-rad-mysql
     image: mysql:latest
