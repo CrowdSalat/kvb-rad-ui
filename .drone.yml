@@ -1,0 +1,29 @@
+kind: pipeline
+type: docker
+name: build
+steps:
+  - name: build and push docker image
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: crowdsalat/kvb-rad-ui
+      tags:
+        - ${DRONE_TAG}
+        - latest
+
+  - name: start application
+    image: docker/compose
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - docker-compose pull
+      - docker-compose up -d --no-deps service
+
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
