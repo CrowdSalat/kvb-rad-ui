@@ -27,8 +27,6 @@ export default {
     response.then((resp) => {
       resp.json()
         .then((jsonResp) => {
-          console.log(jsonResp);
-
           // eslint-disable-next-line no-underscore-dangle
           const { tours } = jsonResp._embedded;
           const list = [];
