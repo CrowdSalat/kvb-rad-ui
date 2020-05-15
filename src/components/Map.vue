@@ -23,10 +23,12 @@ export default {
     this.initMap();
     this.initLayer();
     const intensity = 1.0;
-    const response = fetch(`${process.env.BACKEND}/tours`);
+    const response = fetch(`${process.env.VUE_APP_BACKEND}/tours`);
     response.then((resp) => {
       resp.json()
         .then((jsonResp) => {
+          console.log(jsonResp);
+
           // eslint-disable-next-line no-underscore-dangle
           const { tours } = jsonResp._embedded;
           const list = [];
