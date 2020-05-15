@@ -32,10 +32,12 @@ export default {
           const { tours } = jsonResp._embedded;
           const list = [];
           tours.forEach((tour) => {
-            const waypoints = decodePath(tour.encodedWaypoints, false);
-            waypoints.forEach((waypoint) => {
-              list.push([waypoint[1], waypoint[0], intensity]);
-            });
+            if (tour.encodedWaypoints) {
+              const waypoints = decodePath(tour.encodedWaypoints, false);
+              waypoints.forEach((waypoint) => {
+                list.push([waypoint[1], waypoint[0], intensity]);
+              });
+            }
           });
           this.initHeatmapLayer(list.slice(10));
         });
