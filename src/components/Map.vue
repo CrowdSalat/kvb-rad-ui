@@ -23,7 +23,7 @@ export default {
     this.initMap();
     this.initLayer();
     const intensity = 1.0;
-    const response = fetch('http://localhost:9090/tours');
+    const response = fetch(`${process.env.BACKEND}/tours`);
     response.then((resp) => {
       resp.json()
         .then((jsonResp) => {
@@ -36,7 +36,6 @@ export default {
               list.push([waypoint[1], waypoint[0], intensity]);
             });
           });
-          console.log(list);
           this.initHeatmapLayer(list.slice(10));
         });
     });
@@ -68,6 +67,7 @@ export default {
         this.map.remove();
       }
     },
+
   },
 };
 </script>
