@@ -25,6 +25,7 @@ export default {
     const intensity = 1.0;
     const response = fetch(`${process.env.VUE_APP_BACKEND}/tours`);
     response.then((resp) => {
+      console.log(resp);
       resp.json()
         .then((jsonResp) => {
           // eslint-disable-next-line no-underscore-dangle
