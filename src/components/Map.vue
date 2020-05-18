@@ -1,5 +1,8 @@
 <template>
-  <div id="mapContainer"></div>
+  <section id="mapComponent">
+    <!--<input v-model="intensity" placeholder="0.4">-->
+    <div id="mapContainer"></div>
+  </section>
 </template>
 
 <script>
@@ -17,7 +20,8 @@ export default {
     return {
       map: null,
       heatLayer: null,
-      points: null,
+      waypoints: [],
+      intensity: 0.5,
     };
   },
   mounted() {
@@ -42,6 +46,7 @@ export default {
         .addTo(this.map);
     },
     initHeatmapLayer(positions) {
+      console.warn('init heatmap');
       if (this.heatLayer) {
         this.map.removeLayer(this.heatLayer);
       }
@@ -57,17 +62,19 @@ export default {
     loadBikeTours() {
       const today = new Date().toISOString();
       const yesterday = new Date(Date.now() - 86400 * 1000).toISOString();
-      const response = fetch(`${process.env.VUE_APP_BACKEND}/tours?start=${yesterday}&end=${today}`);
+      const url = `${process.env.VUE_APP_BACKEND}/tours?start=${yesterday}&end=${today}`;
+      console.log('url', url);
+      const response = fetch(url);
       response.then((resp) => {
         if (resp.ok) {
-          resp.json().then(this.parseJSONBikeTour);
+          resp.json()
+            .then(this.parseJSONBikeTour);
         } else {
           console.warn(resp.status, resp.statusText);
         }
       });
     },
     parseJSONBikeTour(jsonResp) {
-      const intensity = 1.0;
       // eslint-disable-next-line no-underscore-dangle
       const { tours } = jsonResp._embedded;
       const list = [];
@@ -75,15 +82,25 @@ export default {
         if (tour.encodedWaypoints) {
           const waypoints = decodePath(tour.encodedWaypoints, false);
           waypoints.forEach((waypoint) => {
-            list.push([waypoint[1], waypoint[0], intensity]);
+            list.push([waypoint[1], waypoint[0]]);
           });
         }
       });
-      this.points = list;
+      this.waypoints = list;
+    },
+  },
+  computed: {
+    heatmapPoints() {
+      const ret = this.waypoints.map((value) => {
+        value.push(this.intensity);
+        return value;
+      });
+      console.warn('heatmapPoints computed');
+      return ret;
     },
   },
   watch: {
-    points(val) {
+    heatmapPoints(val) {
       this.initHeatmapLayer(val);
     },
   },
