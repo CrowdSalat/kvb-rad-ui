@@ -17,31 +17,14 @@ export default {
     return {
       map: null,
       heatLayer: null,
+      points: null,
     };
   },
   mounted() {
     this.initMap();
     this.initLayer();
-    const intensity = 1.0;
-    const response = fetch(`${process.env.VUE_APP_BACKEND}/tours`);
-    response.then((resp) => {
-      console.log(resp);
-      resp.json()
-        .then((jsonResp) => {
-          // eslint-disable-next-line no-underscore-dangle
-          const { tours } = jsonResp._embedded;
-          const list = [];
-          tours.forEach((tour) => {
-            if (tour.encodedWaypoints) {
-              const waypoints = decodePath(tour.encodedWaypoints, false);
-              waypoints.forEach((waypoint) => {
-                list.push([waypoint[1], waypoint[0], intensity]);
-              });
-            }
-          });
-          this.initHeatmapLayer(list.slice(10));
-        });
-    });
+    const tours = this.loadBikeTours();
+    this.initHeatmapLayer(tours);
   },
   beforeDestroy() {
     this.removeMap();
@@ -71,6 +54,38 @@ export default {
       }
     },
 
+    loadBikeTours() {
+      const today = new Date().toISOString();
+      const yesterday = new Date(Date.now() - 86400 * 1000).toISOString();
+      const response = fetch(`${process.env.VUE_APP_BACKEND}/tours?start=${yesterday}&end=${today}`);
+      response.then((resp) => {
+        if (resp.ok) {
+          resp.json().then(this.parseJSONBikeTour);
+        } else {
+          console.warn(resp.status, resp.statusText);
+        }
+      });
+    },
+    parseJSONBikeTour(jsonResp) {
+      const intensity = 1.0;
+      // eslint-disable-next-line no-underscore-dangle
+      const { tours } = jsonResp._embedded;
+      const list = [];
+      tours.forEach((tour) => {
+        if (tour.encodedWaypoints) {
+          const waypoints = decodePath(tour.encodedWaypoints, false);
+          waypoints.forEach((waypoint) => {
+            list.push([waypoint[1], waypoint[0], intensity]);
+          });
+        }
+      });
+      this.points = list;
+    },
+  },
+  watch: {
+    points(val) {
+      this.initHeatmapLayer(val);
+    },
   },
 };
 </script>
