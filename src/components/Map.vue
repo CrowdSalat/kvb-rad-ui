@@ -27,8 +27,8 @@ export default {
   mounted() {
     this.initMap();
     this.initLayer();
-    const tours = this.loadBikeTours();
-    this.initHeatmapLayer(tours);
+    this.loadBikeTours();
+    this.initHeatmapLayer(this.heatmapPoints);
   },
   beforeDestroy() {
     this.removeMap();
