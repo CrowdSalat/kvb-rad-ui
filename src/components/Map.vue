@@ -28,7 +28,6 @@ export default {
     this.initMap();
     this.initLayer();
     this.loadBikeTours();
-    this.initHeatmapLayer(this.heatmapPoints);
   },
   beforeDestroy() {
     this.removeMap();
@@ -46,7 +45,6 @@ export default {
         .addTo(this.map);
     },
     initHeatmapLayer(positions) {
-      console.warn('init heatmap');
       if (this.heatLayer) {
         this.map.removeLayer(this.heatLayer);
       }
@@ -75,33 +73,29 @@ export default {
       });
     },
     parseJSONBikeTour(jsonResp) {
+      this.waypoints = [];
       // eslint-disable-next-line no-underscore-dangle
       const { tours } = jsonResp._embedded;
-      const list = [];
       tours.forEach((tour) => {
+        const tourList = [];
         if (tour.encodedWaypoints) {
-          const waypoints = decodePath(tour.encodedWaypoints, false);
-          waypoints.forEach((waypoint) => {
-            list.push([waypoint[1], waypoint[0]]);
+          const path = decodePath(tour.encodedWaypoints, false);
+          path.forEach((waypoint) => {
+            tourList.push([waypoint[1], waypoint[0]]);
           });
+          this.waypoints.push(tourList);
         }
       });
-      this.waypoints = list;
     },
-  },
-  computed: {
-    heatmapPoints() {
-      const ret = this.waypoints.map((value) => {
-        value.push(this.intensity);
-        return value;
+    initPolylines(waypoints) {
+      waypoints.forEach((tour) => {
+        L.polyline(tour, { color: 'red' }).addTo(this.map);
       });
-      console.warn('heatmapPoints computed');
-      return ret;
     },
   },
   watch: {
-    heatmapPoints(val) {
-      this.initHeatmapLayer(val);
+    waypoints(val) {
+      this.initPolylines(val);
     },
   },
 };
