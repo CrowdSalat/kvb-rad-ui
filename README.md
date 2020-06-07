@@ -3,6 +3,7 @@
 ## Project setup
 ```
 npm install
+vue invoke vuetify #needed to generate vue.config.js and plugins/vuetify.js
 ```
 
 ### Compiles and hot-reloads for development
