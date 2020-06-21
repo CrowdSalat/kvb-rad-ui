@@ -100,7 +100,9 @@ export default {
       let lastTour = copyWaypoint[0];
       copyWaypoint.forEach((tour) => {
         if (tour[0][0] === lastTour[0][0]
-          && tour[0][1] === lastTour[0][1]) {
+          && tour[0][1] === lastTour[0][1]
+          && tour[1][0] === lastTour[1][0]
+          && tour[1][1] === lastTour[1][1]) {
           count += 1;
         } else {
           let color;
