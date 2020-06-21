@@ -106,8 +106,9 @@ export default {
           count += 1;
         } else {
           const color = this.getColor(count);
-          L.polyline(lastTour.slice(), { color })
-            .addTo(this.map);
+          const polyline = L.polyline(lastTour.slice(), { color });
+          polyline.bindPopup(`Used ${count} times.`);
+          polyline.addTo(this.map);
           count = 1;
         }
         // eslint-disable-next-line prefer-destructuring
