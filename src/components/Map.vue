@@ -46,13 +46,6 @@ export default {
       })
         .addTo(this.map);
     },
-    initHeatmapLayer(positions) {
-      if (this.heatLayer) {
-        this.map.removeLayer(this.heatLayer);
-      }
-      this.heatLayer = L.heatLayer(positions, { radius: 25 });
-      this.heatLayer.addTo(this.map);
-    },
     removeMap() {
       if (this.map) {
         this.map.remove();
