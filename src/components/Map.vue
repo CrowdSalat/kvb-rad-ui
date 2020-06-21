@@ -105,14 +105,7 @@ export default {
           && tour[1][1] === lastTour[1][1]) {
           count += 1;
         } else {
-          let color;
-          if (count < this.yellowThreshold) {
-            color = 'green';
-          } else if (count < this.redThreshold) {
-            color = 'yellow';
-          } else {
-            color = 'red';
-          }
+          const color = this.getColor(count);
           L.polyline(lastTour.slice(), { color })
             .addTo(this.map);
           count = 1;
@@ -120,6 +113,15 @@ export default {
         // eslint-disable-next-line prefer-destructuring
         lastTour = tour;
       });
+    },
+    getColor(count) {
+      if (count < this.yellowThreshold) {
+        return 'green';
+      }
+      if (count < this.redThreshold) {
+        return 'yellow';
+      }
+      return 'red';
     },
   },
   watch: {
