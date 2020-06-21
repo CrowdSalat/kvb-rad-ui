@@ -119,7 +119,7 @@ export default {
         return 'green';
       }
       if (count < this.redThreshold) {
-        return 'yellow';
+        return 'orange';
       }
       return 'red';
     },
