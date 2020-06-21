@@ -21,7 +21,6 @@ export default {
       map: null,
       heatLayer: null,
       waypoints: [],
-      intensity: 0.5,
       precision: 5,
       yellowThreshold: 10,
       redThreshold: 30,
