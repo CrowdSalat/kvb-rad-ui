@@ -98,10 +98,10 @@ export default {
       });
       let count = 0;
       let lastTour = copyWaypoint[0];
-      const drawPrecendence = [];
-      drawPrecendence.green = [];
-      drawPrecendence.orange = [];
-      drawPrecendence.red = [];
+      const drawPrecedence = [];
+      drawPrecedence.green = [];
+      drawPrecedence.orange = [];
+      drawPrecedence.red = [];
       copyWaypoint.forEach((tour) => {
         if (tour[0][0] === lastTour[0][0]
           && tour[0][1] === lastTour[0][1]
@@ -112,15 +112,15 @@ export default {
           const color = this.getColor(count);
           const polyline = L.polyline(lastTour.slice(), { color });
           polyline.bindPopup(`Used ${count} times.`);
-          drawPrecendence[color].push(polyline);
+          drawPrecedence[color].push(polyline);
           count = 1;
         }
         // eslint-disable-next-line prefer-destructuring
         lastTour = tour;
       });
-      drawPrecendence.green.forEach((lines) => lines.addTo(this.map));
-      drawPrecendence.orange.forEach((lines) => lines.addTo(this.map));
-      drawPrecendence.red.forEach((lines) => lines.addTo(this.map));
+      drawPrecedence.green.forEach((lines) => lines.addTo(this.map));
+      drawPrecedence.orange.forEach((lines) => lines.addTo(this.map));
+      drawPrecedence.red.forEach((lines) => lines.addTo(this.map));
     },
     getColor(count) {
       if (count < this.yellowThreshold) {
