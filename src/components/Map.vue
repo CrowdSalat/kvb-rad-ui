@@ -84,7 +84,6 @@ export default {
         if (resp.ok) {
           resp.json()
             .then(this.parseJSONBikeTour);
-          this.loading = false;
         } else {
           console.warn(resp.status, resp.statusText);
           this.alert = true;
@@ -143,6 +142,7 @@ export default {
         // eslint-disable-next-line prefer-destructuring
         lastTour = tour;
       });
+      this.loading = false;
       drawPrecedence.green.forEach((lines) => lines.addTo(this.map));
       drawPrecedence.orange.forEach((lines) => lines.addTo(this.map));
       drawPrecedence.red.forEach((lines) => lines.addTo(this.map));
