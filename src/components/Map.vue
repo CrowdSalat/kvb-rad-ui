@@ -19,7 +19,6 @@ export default {
   data() {
     return {
       map: null,
-      heatLayer: null,
       waypoints: [],
       precision: 5,
       yellowThreshold: 10,
@@ -143,7 +142,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 #mapContainer {
-  width: 100vw;
-  height: 100vh;
+  width: 99vw;
+  height: 95vh;
+  padding: 0px;
 }
 </style>
