@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     reload() {
+      this.$refs.map.removePolylines();
       this.$refs.map.loadBikeTours();
     },
   },

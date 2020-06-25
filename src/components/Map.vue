@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       map: null,
+      polylines: null,
       waypoints: [],
       precision: 5,
       yellowThreshold: 10,
@@ -72,6 +73,10 @@ export default {
       if (this.map) {
         this.map.remove();
       }
+    },
+    removePolylines() {
+      this.map.removeLayer(this.polylines);
+      this.polylines = null;
     },
     hideAlert() {
       window.setInterval(() => {
@@ -151,9 +156,9 @@ export default {
       });
       this.loading = false;
       console.debug('draw polylines');
-      drawPrecedence.green.forEach((lines) => lines.addTo(this.map));
-      drawPrecedence.orange.forEach((lines) => lines.addTo(this.map));
-      drawPrecedence.red.forEach((lines) => lines.addTo(this.map));
+      this.polylines = L.layerGroup(drawPrecedence.green.concat(drawPrecedence.orange)
+        .concat(drawPrecedence.red));
+      this.polylines.addTo(this.map);
       console.debug(`Drawn ${drawPrecedence.green.length + drawPrecedence.orange.length + drawPrecedence.red.length} polylines.`);
     },
     getColor(count) {
