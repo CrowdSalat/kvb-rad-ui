@@ -53,7 +53,11 @@ export default {
   },
   methods: {
     initMap() {
-      this.map = L.map('mapContainer')
+      this.map = L.map('mapContainer', {
+        bounds: [[51.092792, 6.653697], [50.815691, 7.205751]],
+        maxZoom: 18,
+        minZoom: 12,
+      })
         .setView([50.935173, 6.953101], 14);
     },
     initLayer() {
@@ -177,6 +181,7 @@ export default {
   height: 95vh;
   padding: 0px;
 }
+
 .overlay {
   z-index: 1000;
   position: absolute;
@@ -187,9 +192,9 @@ export default {
   overflow: hidden;
 }
 
-#downloadProgress{
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
+#downloadProgress {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
