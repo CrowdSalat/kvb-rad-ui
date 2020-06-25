@@ -81,7 +81,7 @@ export default {
       const today = new Date().toISOString();
       const yesterday = new Date(Date.now() - 86400 * 1000).toISOString();
       const url = `${process.env.VUE_APP_BACKEND}/tours?start=${yesterday}&end=${today}`;
-      console.log('url', url);
+      console.debug('url', url);
       const response = fetch(url);
       this.loading = true;
       response.then((resp) => {
@@ -115,8 +115,8 @@ export default {
       });
       this.waypoints = newWaypoint;
     },
-    // TODO refactor
     initPolylines(waypoints) {
+      console.debug('prepare polylines');
       const copyWaypoint = waypoints.slice();
       copyWaypoint.sort((a, b) => {
         if (a[0][0] !== b[0][0]) return a[0][0] - b[0][0];
@@ -138,7 +138,9 @@ export default {
           count += 1;
         } else {
           const color = this.getColor(count);
-          const polyline = L.polyline(lastTour.slice(), { color });
+          const polyline = L.polyline(lastTour.slice(), {
+            color,
+          });
           polyline.bindPopup(`Used ${count} times.`);
           drawPrecedence[color].push(polyline);
           count = 1;
@@ -147,9 +149,11 @@ export default {
         lastTour = tour;
       });
       this.loading = false;
+      console.debug('draw polylines');
       drawPrecedence.green.forEach((lines) => lines.addTo(this.map));
       drawPrecedence.orange.forEach((lines) => lines.addTo(this.map));
       drawPrecedence.red.forEach((lines) => lines.addTo(this.map));
+      console.debug(`Drawn ${drawPrecedence.green.length + drawPrecedence.orange.length + drawPrecedence.red.length} polylines.`);
     },
     getColor(count) {
       if (count < this.yellowThreshold) {
