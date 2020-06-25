@@ -1,10 +1,23 @@
 <template>
   <section id="mapComponent">
     <!--<input v-model="intensity" placeholder="0.4">-->
-    <v-alert id="error" type="error" :value="alert">
+    <v-alert id="error"
+             type="error"
+             class="overlay"
+             :value="alert">
       Could not retrieve the data.
     </v-alert>
-    <div id="mapContainer"></div>
+    <v-progress-circular
+      id="downloadProgress"
+      class="overlay"
+      indeterminate
+      color="primary"
+      :size="70"
+      :width="7"
+      v-if="loading"
+    />
+    <div id="mapContainer">
+    </div>
   </section>
 </template>
 
@@ -27,6 +40,7 @@ export default {
       yellowThreshold: 10,
       redThreshold: 30,
       alert: false,
+      loading: false,
     };
   },
   mounted() {
@@ -54,7 +68,7 @@ export default {
         this.map.remove();
       }
     },
-    hide_alert() {
+    hideAlert() {
       window.setInterval(() => {
         this.alert = false;
       }, 3000);
@@ -65,13 +79,16 @@ export default {
       const url = `${process.env.VUE_APP_BACKEND}/tours?start=${yesterday}&end=${today}`;
       console.log('url', url);
       const response = fetch(url);
+      this.loading = true;
       response.then((resp) => {
         if (resp.ok) {
           resp.json()
             .then(this.parseJSONBikeTour);
+          this.loading = false;
         } else {
           console.warn(resp.status, resp.statusText);
           this.alert = true;
+          this.loading = false;
         }
       });
     },
@@ -146,7 +163,7 @@ export default {
     },
     alert(val) {
       if (val) {
-        this.hide_alert();
+        this.hideAlert();
       }
     },
   },
@@ -160,11 +177,19 @@ export default {
   height: 95vh;
   padding: 0px;
 }
-
-#error{
-  position: absolute;
+.overlay {
   z-index: 1000;
+  position: absolute;
+}
+
+#error {
   width: 99vw;
   overflow: hidden;
+}
+
+#downloadProgress{
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
 }
 </style>
