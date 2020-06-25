@@ -61,9 +61,9 @@ export default {
         .setView([50.935173, 6.953101], 14);
     },
     initLayer() {
-      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution:
-          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+          '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
       })
         .addTo(this.map);
     },
