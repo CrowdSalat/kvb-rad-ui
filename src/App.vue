@@ -8,11 +8,7 @@
       <v-spacer></v-spacer>
 
       <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+        <v-icon  @click="reload">mdi-reload</v-icon>
       </v-btn>
     </v-app-bar>
 
@@ -20,7 +16,7 @@
     <v-main id="main">
       <!-- Provides the application the proper gutter -->
       <v-container id="main" fluid>
-        <Map />
+        <Map ref="map"/>
       </v-container>
     </v-main>
   </v-app>
@@ -33,6 +29,11 @@ export default {
   name: 'App',
   components: {
     Map,
+  },
+  methods: {
+    reload() {
+      this.$refs.map.loadBikeTours();
+    },
   },
 };
 </script>
