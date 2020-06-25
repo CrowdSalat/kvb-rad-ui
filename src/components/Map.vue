@@ -57,6 +57,7 @@ export default {
         bounds: [[51.092792, 6.653697], [50.815691, 7.205751]],
         maxZoom: 18,
         minZoom: 12,
+        renderer: L.canvas(),
       })
         .setView([50.935173, 6.953101], 14);
     },
