@@ -1,6 +1,9 @@
 <template>
   <section id="mapComponent">
     <!--<input v-model="intensity" placeholder="0.4">-->
+    <v-alert id="error" type="error" :value="alert">
+      Could not retrieve the data.
+    </v-alert>
     <div id="mapContainer"></div>
   </section>
 </template>
@@ -23,6 +26,7 @@ export default {
       precision: 5,
       yellowThreshold: 10,
       redThreshold: 30,
+      alert: false,
     };
   },
   mounted() {
@@ -50,7 +54,11 @@ export default {
         this.map.remove();
       }
     },
-
+    hide_alert() {
+      window.setInterval(() => {
+        this.alert = false;
+      }, 3000);
+    },
     loadBikeTours() {
       const today = new Date().toISOString();
       const yesterday = new Date(Date.now() - 86400 * 1000).toISOString();
@@ -63,6 +71,7 @@ export default {
             .then(this.parseJSONBikeTour);
         } else {
           console.warn(resp.status, resp.statusText);
+          this.alert = true;
         }
       });
     },
@@ -135,6 +144,11 @@ export default {
     waypoints(val) {
       this.initPolylines(val);
     },
+    alert(val) {
+      if (val) {
+        this.hide_alert();
+      }
+    },
   },
 };
 </script>
@@ -145,5 +159,12 @@ export default {
   width: 99vw;
   height: 95vh;
   padding: 0px;
+}
+
+#error{
+  position: absolute;
+  z-index: 1000;
+  width: 99vw;
+  overflow: hidden;
 }
 </style>
