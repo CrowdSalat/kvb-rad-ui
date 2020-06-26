@@ -8,7 +8,10 @@
       <v-spacer></v-spacer>
 
       <v-btn icon>
-        <v-icon  @click="reload">mdi-reload</v-icon>
+        <v-icon @click="showStatistics">mdi-chart-bar</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon @click="reload">mdi-reload</v-icon>
       </v-btn>
     </v-app-bar>
 
@@ -17,6 +20,7 @@
       <!-- Provides the application the proper gutter -->
       <v-container id="main" fluid>
         <Map ref="map"/>
+        <Statistics ref="statistics"/>
       </v-container>
     </v-main>
   </v-app>
@@ -24,16 +28,22 @@
 
 <script>
 import Map from './components/Map.vue';
+import Statistics from './components/Statistics.vue';
 
 export default {
   name: 'App',
   components: {
     Map,
+    Statistics,
   },
   methods: {
     reload() {
       this.$refs.map.removePolylines();
       this.$refs.map.loadBikeTours();
+    },
+    showStatistics() {
+      console.debug('stats clicked');
+      this.$refs.statistics.toggleStatsOverlay();
     },
   },
 };
@@ -49,6 +59,7 @@ export default {
   width: 100%;
   padding: 0px;
 }
+
 #main {
   padding: 0px;
 }
