@@ -65,6 +65,7 @@ export default {
   methods: {
     reload() {
       this.$refs.map.removePolylines();
+      this.loading = true;
       this.waypoints = loadBikeData(this.showBikeRoutes, this.errorHandler);
     },
     showStatistics() {
