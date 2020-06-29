@@ -1,4 +1,4 @@
-import { decodePath } from '../components/graphhopper';
+import { decodePath } from './graphhopper';
 
 // decimal places for the longitude and the latitude
 const precision = 5;

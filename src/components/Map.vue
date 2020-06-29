@@ -13,7 +13,7 @@ import L from 'leaflet';
 import 'leaflet.heat';
 
 // eslint-disable-next-line no-unused-vars
-import { decodePath } from './graphhopper';
+import { decodePath } from '../services/graphhopper';
 
 export default {
   name: 'Map',
