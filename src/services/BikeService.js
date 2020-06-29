@@ -8,9 +8,12 @@ function parseJSONBikeTour(jsonResp) {
   const { tours } = jsonResp._embedded;
   const rentedBikes24h = tours.length;
   let riddenDistance24hKm = 0;
+  const rentalHours = Array.from(Array(24).keys());
   const waypoints = [];
   tours.forEach((tour) => {
     riddenDistance24hKm += tour.distance;
+    const hour = new Date(tour.creationDate).getHours();
+    rentalHours[hour] += 1;
     if (tour.encodedWaypoints) {
       const path = decodePath(tour.encodedWaypoints, false);
       let prevWaypoint;
@@ -30,6 +33,7 @@ function parseJSONBikeTour(jsonResp) {
     waypoints,
     rentedBikes24h,
     riddenDistance24hKm,
+    rentalHours,
   };
 }
 

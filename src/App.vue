@@ -57,6 +57,7 @@ export default {
       waypoints: [],
       riddenDistance24hKm: 0,
       rentedBikes24h: 0,
+      rentalHours: [],
       loading: false,
       alert: false,
     };
@@ -67,7 +68,8 @@ export default {
       this.waypoints = loadBikeData(this.showBikeRoutes, this.errorHandler);
     },
     showStatistics() {
-      this.$refs.statistics.setData(0, this.rentedBikes24h, this.riddenDistance24hKm);
+      this.$refs.statistics.setData(this.rentalHours,
+        this.rentedBikes24h, this.riddenDistance24hKm);
       this.$refs.statistics.toggleStatsOverlay();
     },
     downloadBikeRoutes() {
@@ -78,6 +80,7 @@ export default {
       this.waypoints = bikeData.waypoints;
       this.rentedBikes24h = bikeData.rentedBikes24h;
       this.riddenDistance24hKm = bikeData.riddenDistance24hKm;
+      this.rentalHours = bikeData.rentalHours;
       this.$refs.map.initPolylines(this.waypoints);
       this.loading = false;
     },
