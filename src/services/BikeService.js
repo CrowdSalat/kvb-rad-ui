@@ -4,10 +4,13 @@ import { decodePath } from './graphhopper';
 const precision = 5;
 
 function parseJSONBikeTour(jsonResp) {
-  const waypoints = [];
   // eslint-disable-next-line no-underscore-dangle
   const { tours } = jsonResp._embedded;
+  const rentedBikes24h = tours.length;
+  let riddenDistance24hKm = 0;
+  const waypoints = [];
   tours.forEach((tour) => {
+    riddenDistance24hKm += tour.distance;
     if (tour.encodedWaypoints) {
       const path = decodePath(tour.encodedWaypoints, false);
       let prevWaypoint;
@@ -21,9 +24,14 @@ function parseJSONBikeTour(jsonResp) {
       });
     }
   });
-  return waypoints;
-}
 
+  riddenDistance24hKm = (riddenDistance24hKm / 1000).toFixed(0);
+  return {
+    waypoints,
+    rentedBikes24h,
+    riddenDistance24hKm,
+  };
+}
 
 function loadBikeTours(successHandler, errorHandler, jsonParser) {
   const today = new Date().toISOString();
