@@ -19,7 +19,22 @@
     <v-main id="main">
       <!-- Provides the application the proper gutter -->
       <v-container id="main" fluid>
-        <Map ref="map"/>
+        <v-progress-circular
+          id="downloadProgress"
+          class="overlay"
+          indeterminate
+          color="primary"
+          :size="70"
+          :width="7"
+          v-if="loading"
+        />
+        <v-alert id="error"
+                 type="error"
+                 class="overlay"
+                 :value="alert">
+          Ups there went something wrong. You may want to try it later.
+        </v-alert>
+        <Map ref="map" waypoints="waypoints"/>
         <Statistics ref="statistics"/>
       </v-container>
     </v-main>
@@ -27,6 +42,7 @@
 </template>
 
 <script>
+import loadBikeData from './services/BikeService';
 import Map from './components/Map.vue';
 import Statistics from './components/Statistics.vue';
 
@@ -36,15 +52,38 @@ export default {
     Map,
     Statistics,
   },
+  data() {
+    return {
+      waypoints: [],
+      loading: false,
+      alert: false,
+    };
+  },
   methods: {
     reload() {
       this.$refs.map.removePolylines();
-      this.$refs.map.loadBikeTours();
+      this.waypoints = loadBikeData(this.showBikeRoutes, this.errorHandler);
     },
     showStatistics() {
-      console.debug('stats clicked');
       this.$refs.statistics.toggleStatsOverlay();
     },
+    downloadBikeRoutes() {
+      this.loading = true;
+      this.waypoints = loadBikeData(this.showBikeRoutes, this.errorHandler.bind(this));
+    },
+    showBikeRoutes(waypoints) {
+      this.$refs.map.initPolylines(waypoints);
+      this.loading = false;
+    },
+    errorHandler() {
+      this.alert = true;
+      window.setInterval(() => {
+        this.alert = false;
+      }, 3000);
+    },
+  },
+  mounted() {
+    this.downloadBikeRoutes();
   },
 };
 </script>
@@ -63,4 +102,21 @@ export default {
 #main {
   padding: 0px;
 }
+
+.overlay {
+  z-index: 1000;
+  position: absolute;
+}
+
+#error {
+  width: 99vw;
+  overflow: hidden;
+}
+#downloadProgress {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
 </style>
