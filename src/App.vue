@@ -6,7 +6,9 @@
       <v-toolbar-title>KVB bike</v-toolbar-title>
 
       <v-spacer></v-spacer>
-
+      <v-btn icon>
+        <v-icon @click="toggleBikePostitions">mdi-bike</v-icon>
+      </v-btn>
       <v-btn icon>
         <v-icon @click="showStatistics">mdi-chart-bar</v-icon>
       </v-btn>
@@ -42,7 +44,7 @@
 </template>
 
 <script>
-import loadBikeData from './services/BikeService';
+import bikeService from './services/BikeService';
 import Map from './components/Map.vue';
 import Statistics from './components/Statistics.vue';
 
@@ -66,7 +68,8 @@ export default {
     reload() {
       this.$refs.map.removePolylines();
       this.loading = true;
-      this.waypoints = loadBikeData(this.showBikeRoutes, this.errorHandler);
+      this.waypoints = bikeService()
+        .loadBikeData(this.showBikeRoutes, this.errorHandler);
     },
     showStatistics() {
       this.$refs.statistics.setData(this.rentalHours,
@@ -75,7 +78,8 @@ export default {
     },
     downloadBikeRoutes() {
       this.loading = true;
-      loadBikeData(this.showBikeRoutes, this.errorHandler.bind(this));
+      bikeService()
+        .loadBikeData(this.showBikeRoutes, this.errorHandler.bind(this));
     },
     showBikeRoutes(bikeData) {
       this.waypoints = bikeData.waypoints;
@@ -84,6 +88,14 @@ export default {
       this.rentalHours = bikeData.rentalHours;
       this.$refs.map.initPolylines(this.waypoints);
       this.loading = false;
+    },
+    toggleBikePostitions() {
+      console.info('toggleBikePostitions');
+      bikeService()
+        .loadCurrentBikePositions(
+          this.$refs.map.initBikePositions,
+          this.errorHandler.bind(this),
+        );
     },
     errorHandler() {
       this.alert = true;

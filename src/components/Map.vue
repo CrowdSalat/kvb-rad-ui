@@ -107,6 +107,16 @@ export default {
       }
       return 'red';
     },
+    initBikePositions(bikes) {
+      const markers = [];
+      bikes.forEach((bike) => {
+        const marker = L.marker([bike.lat, bike.lng])
+          .bindPopup(bike.bikeId);
+        markers.push(marker);
+      });
+      const bikeLayer = L.layerGroup(markers);
+      bikeLayer.addTo(this.map);
+    },
   },
   watch: {
     waypoints(val) {

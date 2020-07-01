@@ -8,7 +8,8 @@ function parseJSONBikeTour(jsonResp) {
   const { tours } = jsonResp._embedded;
   const rentedBikes24h = tours.length;
   let riddenDistance24hKm = 0;
-  const rentalHours = Array.from(Array(24).keys());
+  const rentalHours = Array.from(Array(24)
+    .keys());
   const waypoints = [];
   tours.forEach((tour) => {
     riddenDistance24hKm += tour.distance;
@@ -56,8 +57,35 @@ function loadBikeTours(successHandler, errorHandler, jsonParser) {
 }
 
 function loadBikeData(successHandler, errorHandler) {
-  console.debug('BikeService#loadBikeData');
   loadBikeTours(successHandler, errorHandler, parseJSONBikeTour);
 }
 
-export default loadBikeData;
+function parseJSONBikes(jsonResp) {
+  // eslint-disable-next-line no-underscore-dangle
+  const bikes = jsonResp._embedded.items;
+  return bikes;
+}
+
+function loadCurrentBikePositions(successHandler, errorHandler) {
+  console.debug('loadCurrentBikePositions');
+  const url = `${process.env.VUE_APP_BACKEND}/bikes`;
+  console.debug('url', url);
+  const response = fetch(url);
+  response.then((resp) => {
+    if (resp.ok) {
+      resp.json()
+        .then(parseJSONBikes)
+        .then(successHandler);
+    } else {
+      console.warn(resp.status, resp.statusText);
+      errorHandler();
+    }
+  });
+}
+
+// TODO change export so the default function do not need to be called before
+//  callig the two functions
+export default () => ({
+  loadBikeData,
+  loadCurrentBikePositions,
+});
