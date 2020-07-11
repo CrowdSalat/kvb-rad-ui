@@ -24,6 +24,7 @@ export default {
       waypoints: [],
       yellowThreshold: 10,
       redThreshold: 30,
+      bikeLayer: null,
     };
   },
   mounted() {
@@ -56,8 +57,16 @@ export default {
       }
     },
     removePolylines() {
-      this.map.removeLayer(this.polylines);
-      this.polylines = null;
+      if (this.polylines) {
+        this.map.removeLayer(this.polylines);
+        this.polylines = null;
+      }
+    },
+    removeBikePositions() {
+      if (this.bikeLayer) {
+        this.map.removeLayer(this.bikeLayer);
+        this.bikeLayer = null;
+      }
     },
     initPolylines(waypoints) {
       console.debug('prepare polylines');
@@ -108,14 +117,15 @@ export default {
       return 'red';
     },
     initBikePositions(bikes) {
+      // TODO webpack creates invalid base64 encoded images which ends with "&quot;)marker-icon.png")
       const markers = [];
       bikes.forEach((bike) => {
         const marker = L.marker([bike.lat, bike.lng])
           .bindPopup(bike.bikeId);
         markers.push(marker);
       });
-      const bikeLayer = L.layerGroup(markers);
-      bikeLayer.addTo(this.map);
+      this.bikeLayer = L.layerGroup(markers);
+      this.bikeLayer.addTo(this.map);
     },
   },
   watch: {

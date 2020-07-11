@@ -62,6 +62,7 @@ export default {
       rentalHours: [],
       loading: false,
       alert: false,
+      showBikePositions: false,
     };
   },
   methods: {
@@ -70,6 +71,7 @@ export default {
       this.loading = true;
       this.waypoints = bikeService()
         .loadBikeData(this.showBikeRoutes, this.errorHandler);
+      // TODO reload bike pos
     },
     showStatistics() {
       this.$refs.statistics.setData(this.rentalHours,
@@ -90,12 +92,16 @@ export default {
       this.loading = false;
     },
     toggleBikePostitions() {
-      console.info('toggleBikePostitions');
-      bikeService()
-        .loadCurrentBikePositions(
-          this.$refs.map.initBikePositions,
-          this.errorHandler.bind(this),
-        );
+      if (this.showBikePositions) {
+        this.$refs.map.removeBikePositions();
+      } else {
+        bikeService()
+          .loadCurrentBikePositions(
+            this.$refs.map.initBikePositions,
+            this.errorHandler.bind(this),
+          );
+      }
+      this.showBikePositions = !this.showBikePositions;
     },
     errorHandler() {
       this.alert = true;
