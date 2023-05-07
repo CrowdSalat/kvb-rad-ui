@@ -41,7 +41,7 @@ function parseJSONBikeTour(jsonResp) {
 function loadBikeTours(successHandler, errorHandler, jsonParser) {
   const today = new Date().toISOString();
   const yesterday = new Date(Date.now() - 86400 * 1000).toISOString();
-  const url = `${process.env.VUE_APP_BACKEND}/tours?start=${yesterday}&end=${today}`;
+  const url = `${process.env.VUE_APP_BACKEND}/tours/search/findToursBetweenDates?start=${yesterday}&end=${today}`;
   console.debug('url', url);
   const response = fetch(url);
   response.then((resp) => {
