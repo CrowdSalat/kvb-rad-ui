@@ -117,7 +117,6 @@ export default {
       return 'red';
     },
     initBikePositions(bikes) {
-      // TODO webpack creates invalid base64 encoded images which ends with "&quot;)marker-icon.png")
       const markers = [];
       bikes.forEach((bike) => {
         const marker = L.marker([bike.lat, bike.lng])
